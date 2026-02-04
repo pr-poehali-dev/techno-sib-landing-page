@@ -52,10 +52,12 @@ const Index = () => {
       const data = await response.json();
       
       if (data.products) {
-        setCatalogProducts(data.products);
+        // Сортируем по цене по возрастанию
+        const sortedProducts = data.products.sort((a: any, b: any) => a.price - b.price);
+        setCatalogProducts(sortedProducts);
         // Сохраняем в localStorage с временной меткой
         localStorage.setItem('catalog_data', JSON.stringify({
-          products: data.products,
+          products: sortedProducts,
           updated_at: data.updated_at
         }));
       }
@@ -460,9 +462,9 @@ const Index = () => {
                 </div>
                 <div className="relative min-h-[400px] lg:min-h-[600px]">
                   <img
-                    src="https://cdn.poehali.dev/projects/bd9048a7-854b-4d3b-a782-386c5097cafc/files/6daba346-ca07-428c-ac88-849d4a8dd86a.jpg"
+                    src="https://cdn.poehali.dev/projects/bd9048a7-854b-4d3b-a782-386c5097cafc/files/ae2da679-b284-4a5b-88ef-6348e86708f4.jpg"
                     alt="Промышленное оборудование"
-                    className="absolute inset-0 w-full h-full object-cover"
+                    className="absolute inset-0 w-full h-full object-contain bg-secondary"
                   />
                 </div>
               </div>
@@ -723,7 +725,7 @@ const Index = () => {
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {catalogProducts.map((product) => (
                 <Card key={product.id} className="hover-scale overflow-hidden flex flex-col">
-                  <img src={product.picture} alt={product.name} className="w-full h-56 object-cover" />
+                  <img src={product.picture} alt={product.name} className="w-full h-56 object-contain bg-secondary" />
                   <CardContent className="p-6 flex-1 flex flex-col">
                     <h3 className="text-xl font-bold mb-3 line-clamp-2">{product.name}</h3>
                     <div className="mb-4">

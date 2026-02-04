@@ -125,7 +125,7 @@ def parse_product(offer):
         # Параметры
         params = offer.findall('param')
         all_params = []
-        first_5_params = []
+        preview_params = []
         
         for param in params:
             param_name = param.get('name')
@@ -145,10 +145,14 @@ def parse_product(offer):
                 param_data['unit'] = unit
             
             all_params.append(param_data)
+            
+            # Для preview исключаем "Бренд"
+            if param_name != 'Бренд' and len(preview_params) < 5:
+                preview_params.append(param_data)
         
-        # Первые 5 параметров
-        product['params_preview'] = all_params[:5]
-        # Все параметры
+        # Первые 5 параметров (без Бренда)
+        product['params_preview'] = preview_params
+        # Все параметры (включая Бренд)
         product['params_full'] = all_params
         
         # Вес

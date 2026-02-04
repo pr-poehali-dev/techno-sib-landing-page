@@ -1,0 +1,16 @@
+{
+  "tests": [
+    {
+      "name": "Check scheduler status",
+      "method": "GET",
+      "path": "/",
+      "expectedStatus": 200,
+      "expectedBody": {
+        "status": "string",
+        "time": "string",
+        "message": "string"
+      },
+      "bodyMatcher": "partial"
+    }
+  ]
+}

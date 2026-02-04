@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -35,6 +35,47 @@ const Index = () => {
   const [quizAnswers, setQuizAnswers] = useState<string[]>(Array(8).fill(''));
   const [showModal, setShowModal] = useState(false);
   const [modalTitle, setModalTitle] = useState('Получить консультацию');
+  const [catalogProducts, setCatalogProducts] = useState<any[]>([]);
+  const [catalogLoading, setCatalogLoading] = useState(true);
+  const [selectedProduct, setSelectedProduct] = useState<any>(null);
+  const [showProductModal, setShowProductModal] = useState(false);
+
+  // Загружаем каталог при монтировании компонента
+  useEffect(() => {
+    loadCatalog();
+  }, []);
+
+  const loadCatalog = async () => {
+    try {
+      setCatalogLoading(true);
+      const response = await fetch('https://functions.poehali.dev/6c4dff3c-6a6e-4b2c-a871-63fd3585e442');
+      const data = await response.json();
+      
+      if (data.products) {
+        setCatalogProducts(data.products);
+        // Сохраняем в localStorage с временной меткой
+        localStorage.setItem('catalog_data', JSON.stringify({
+          products: data.products,
+          updated_at: data.updated_at
+        }));
+      }
+    } catch (error) {
+      console.error('Ошибка загрузки каталога:', error);
+      // Пробуем загрузить из кэша
+      const cached = localStorage.getItem('catalog_data');
+      if (cached) {
+        const cachedData = JSON.parse(cached);
+        setCatalogProducts(cachedData.products || []);
+      }
+    } finally {
+      setCatalogLoading(false);
+    }
+  };
+
+  const openProductDetails = (product: any) => {
+    setSelectedProduct(product);
+    setShowProductModal(true);
+  };
 
   const openModal = (title: string) => {
     setModalTitle(title);
@@ -669,25 +710,55 @@ const Index = () => {
               </Select>
             </div>
           </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredEquipment.map((item, index) => (
-              <Card key={index} className="hover-scale overflow-hidden">
-                <img src={item.image} alt={item.model} className="w-full h-48 object-cover" />
-                <CardContent className="p-6">
-                  <Badge className="mb-2 bg-accent text-accent-foreground">{item.brand}</Badge>
-                  <h3 className="text-2xl font-bold mb-2">{item.model}</h3>
-                  <div className="flex items-center gap-4 mb-3">
-                    <Badge variant="outline">{item.type}</Badge>
-                    <span className="text-accent font-semibold">{item.capacity}</span>
-                  </div>
-                  <p className="text-muted-foreground mb-4">{item.description}</p>
-                  <Button className="w-full bg-accent hover:bg-accent/90 text-accent-foreground" onClick={() => openModal('Запросить КП')}>
-                    Узнать цену
-                  </Button>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+          {catalogLoading ? (
+            <div className="text-center py-12">
+              <Icon name="Loader2" className="w-12 h-12 text-accent animate-spin mx-auto mb-4" />
+              <p className="text-muted-foreground">Загрузка каталога...</p>
+            </div>
+          ) : catalogProducts.length === 0 ? (
+            <div className="text-center py-12">
+              <p className="text-muted-foreground">Товары не найдены</p>
+            </div>
+          ) : (
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {catalogProducts.map((product) => (
+                <Card key={product.id} className="hover-scale overflow-hidden flex flex-col">
+                  <img src={product.picture} alt={product.name} className="w-full h-56 object-cover" />
+                  <CardContent className="p-6 flex-1 flex flex-col">
+                    <h3 className="text-xl font-bold mb-3 line-clamp-2">{product.name}</h3>
+                    <div className="mb-4">
+                      <span className="text-2xl font-bold text-accent">от {Math.round(product.price).toLocaleString('ru-RU')} ₽</span>
+                    </div>
+                    {product.params_preview && product.params_preview.length > 0 && (
+                      <div className="mb-4 space-y-1">
+                        {product.params_preview.map((param: any, idx: number) => (
+                          <div key={idx} className="text-sm">
+                            <span className="text-muted-foreground">{param.name}:</span>{' '}
+                            <span className="font-medium">{param.value}{param.unit ? ` ${param.unit}` : ''}</span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                    <div className="mt-auto space-y-2">
+                      <Button 
+                        className="w-full bg-accent hover:bg-accent/90 text-accent-foreground" 
+                        onClick={() => openProductDetails(product)}
+                      >
+                        Смотреть подробнее
+                      </Button>
+                      <Button 
+                        variant="outline"
+                        className="w-full" 
+                        onClick={() => openModal('Запросить КП')}
+                      >
+                        Запросить КП
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
@@ -995,7 +1066,7 @@ const Index = () => {
           <DialogHeader>
             <DialogTitle>{modalTitle}</DialogTitle>
           </DialogHeader>
-          <form onSubmit={(e) => { e.preventDefault(); /* handle submit */ }} className="space-y-4">
+          <form onSubmit={(e) => { e.preventDefault(); }} className="space-y-4">
             <div>
               <Label htmlFor="modal-name">Имя *</Label>
               <Input
@@ -1025,6 +1096,67 @@ const Index = () => {
               Отправить
             </Button>
           </form>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={showProductModal} onOpenChange={setShowProductModal}>
+        <DialogContent className="sm:max-w-3xl max-h-[90vh] overflow-y-auto">
+          {selectedProduct && (
+            <>
+              <DialogHeader>
+                <DialogTitle className="text-2xl">{selectedProduct.name}</DialogTitle>
+              </DialogHeader>
+              <div className="space-y-6">
+                <img 
+                  src={selectedProduct.picture} 
+                  alt={selectedProduct.name} 
+                  className="w-full h-80 object-cover rounded-lg"
+                />
+                
+                <div>
+                  <h3 className="text-3xl font-bold text-accent mb-4">
+                    {Math.round(selectedProduct.price).toLocaleString('ru-RU')} ₽
+                  </h3>
+                </div>
+
+                {selectedProduct.params_full && selectedProduct.params_full.length > 0 && (
+                  <div>
+                    <h3 className="text-lg font-semibold mb-3">Характеристики</h3>
+                    <div className="grid sm:grid-cols-2 gap-3">
+                      {selectedProduct.params_full.map((param: any, idx: number) => (
+                        <div key={idx} className="text-sm border-b pb-2">
+                          <span className="text-muted-foreground">{param.name}:</span>{' '}
+                          <span className="font-medium">{param.value}{param.unit ? ` ${param.unit}` : ''}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {selectedProduct.description && (
+                  <div>
+                    <h3 className="text-lg font-semibold mb-3">Описание</h3>
+                    <div 
+                      className="prose prose-sm max-w-none"
+                      dangerouslySetInnerHTML={{ __html: selectedProduct.description }}
+                    />
+                  </div>
+                )}
+
+                <div className="pt-4 border-t">
+                  <Button 
+                    className="w-full bg-accent hover:bg-accent/90 text-accent-foreground font-semibold"
+                    onClick={() => {
+                      setShowProductModal(false);
+                      openModal('Запросить КП на ' + selectedProduct.name);
+                    }}
+                  >
+                    Запросить коммерческое предложение
+                  </Button>
+                </div>
+              </div>
+            </>
+          )}
         </DialogContent>
       </Dialog>
     </div>

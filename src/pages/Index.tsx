@@ -7,6 +7,12 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 import Icon from '@/components/ui/icon';
 import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import {
   Accordion,
   AccordionContent,
   AccordionItem,
@@ -27,7 +33,19 @@ const Index = () => {
   const [filterCapacity, setFilterCapacity] = useState('all');
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [quizAnswers, setQuizAnswers] = useState<string[]>(Array(8).fill(''));
-  const [selectedRole, setSelectedRole] = useState('director');
+  const [showModal, setShowModal] = useState(false);
+  const [modalTitle, setModalTitle] = useState('Получить консультацию');
+
+  const openModal = (title: string) => {
+    setModalTitle(title);
+    setShowModal(true);
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
+    setFormData({ name: '', phone: '' });
+    setAgreed(false);
+  };
 
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
@@ -356,7 +374,7 @@ const Index = () => {
                 <div className="text-lg font-semibold">8-800-533-82-68</div>
                 <div className="text-xs opacity-90">Демозалы: Москва и Новосибирск</div>
               </div>
-              <Button variant="secondary" className="bg-accent hover:bg-accent/90 text-accent-foreground font-semibold">
+              <Button variant="secondary" className="bg-accent hover:bg-accent/90 text-accent-foreground font-semibold" onClick={() => openModal('Получить КП за 24 часа')}>
                 Получить КП за 24 часа
               </Button>
             </div>
@@ -364,90 +382,50 @@ const Index = () => {
         </div>
       </header>
 
-      <section className="relative py-20 md:py-32 bg-gradient-to-br from-primary to-primary/90 text-primary-foreground overflow-hidden">
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute inset-0" style={{
-            backgroundImage: `url(https://cdn.poehali.dev/projects/bd9048a7-854b-4d3b-a782-386c5097cafc/files/b001e360-62cc-4ac3-b27b-6638fa567113.jpg)`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-          }} />
-        </div>
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div className="animate-fade-in">
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
-                Промышленные мясорубки, волчки и куттеры от 300–10 000 кг/ч
-              </h1>
-              <p className="text-xl md:text-2xl mb-8 opacity-95">
-                Прямые поставки от ведущих европейских и азиатских производителей
-              </p>
-              <div className="space-y-4 mb-8">
-                <div className="flex items-start gap-3">
-                  <Icon name="CheckCircle2" className="w-6 h-6 text-accent flex-shrink-0 mt-1" />
-                  <p className="text-lg">Цена без лишних наценок: поставки напрямую от производителей</p>
-                </div>
-                <div className="flex items-start gap-3">
-                  <Icon name="CheckCircle2" className="w-6 h-6 text-accent flex-shrink-0 mt-1" />
-                  <p className="text-lg">Проверяем товар перед покупкой. Можем продемонстрировать работу узлов и оборудования в нашем шоуруме в Москве и Новосибирске</p>
-                </div>
-                <div className="flex items-start gap-3">
-                  <Icon name="CheckCircle2" className="w-6 h-6 text-accent flex-shrink-0 mt-1" />
-                  <p className="text-lg">Гарантируем качество оборудования – услуги пусконаладки, большой склад запчастей, техподдержка</p>
-                </div>
-              </div>
-              <Card className="bg-white shadow-2xl mb-8">
-                <CardContent className="p-8">
-                  <h3 className="text-2xl font-bold text-foreground mb-6">Получить подбор и КП</h3>
-                  <form className="space-y-4">
-                    <div>
-                      <Label htmlFor="hero-name" className="text-foreground">Имя *</Label>
-                      <Input
-                        id="hero-name"
-                        placeholder="Ваше имя"
-                        className="mt-2"
-                        value={formData.name}
-                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      />
+      <section className="relative py-20 md:py-32 bg-gradient-to-br from-secondary via-background to-secondary overflow-hidden">
+        <div className="container mx-auto px-4">
+          <div className="max-w-7xl mx-auto">
+            <Card className="overflow-hidden shadow-2xl bg-white">
+              <div className="grid lg:grid-cols-2 gap-0">
+                <div className="p-8 md:p-12 lg:p-16 flex flex-col justify-center">
+                  <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight text-foreground">
+                    Промышленные мясорубки, волчки и куттеры от 300–10 000 кг/ч
+                  </h1>
+                  <p className="text-xl md:text-2xl mb-8 text-muted-foreground">
+                    Прямые поставки от ведущих европейских и азиатских производителей
+                  </p>
+                  <div className="space-y-4 mb-8">
+                    <div className="flex items-start gap-3">
+                      <Icon name="CheckCircle2" className="w-6 h-6 text-accent flex-shrink-0 mt-1" />
+                      <p className="text-lg text-foreground">Цена без лишних наценок: поставки напрямую от производителей</p>
                     </div>
-                    <div>
-                      <Label htmlFor="hero-phone" className="text-foreground">Телефон *</Label>
-                      <Input
-                        id="hero-phone"
-                        type="tel"
-                        placeholder="+7 (___) ___-__-__"
-                        className="mt-2"
-                        value={formData.phone}
-                        onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                      />
+                    <div className="flex items-start gap-3">
+                      <Icon name="CheckCircle2" className="w-6 h-6 text-accent flex-shrink-0 mt-1" />
+                      <p className="text-lg text-foreground">Проверяем товар перед покупкой. Можем продемонстрировать работу узлов и оборудования в нашем шоуруме в Москве и Новосибирске</p>
                     </div>
-                    <div className="flex items-start gap-2">
-                      <Checkbox id="hero-agree" checked={agreed} onCheckedChange={(checked) => setAgreed(checked as boolean)} />
-                      <label htmlFor="hero-agree" className="text-sm text-muted-foreground cursor-pointer">
-                        Я согласен с <a href="#" className="text-accent underline">политикой конфиденциальности</a>
-                      </label>
+                    <div className="flex items-start gap-3">
+                      <Icon name="CheckCircle2" className="w-6 h-6 text-accent flex-shrink-0 mt-1" />
+                      <p className="text-lg text-foreground">Гарантируем качество оборудования – услуги пусконаладки, большой склад запчастей, техподдержка</p>
                     </div>
-                    <Button type="submit" size="lg" className="w-full bg-accent hover:bg-accent/90 text-accent-foreground font-semibold">
-                      Отправить
+                  </div>
+                  <div className="flex flex-wrap gap-4">
+                    <Button size="lg" onClick={() => openModal('Подобрать модель')} className="bg-accent hover:bg-accent/90 text-accent-foreground text-lg px-8 py-6">
+                      Подобрать модель
                     </Button>
-                  </form>
-                </CardContent>
-              </Card>
-              <div className="flex flex-wrap gap-4">
-                <Button size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground text-lg px-8 py-6">
-                  Подобрать модель
-                </Button>
-                <Button size="lg" className="border-2 border-primary-foreground bg-primary-foreground text-primary hover:bg-primary-foreground/90 text-lg px-8 py-6 font-semibold">
-                  Записаться в демозал
-                </Button>
+                    <Button size="lg" onClick={() => openModal('Записаться в демозал')} className="border-2 border-primary bg-primary text-primary-foreground hover:bg-primary/90 text-lg px-8 py-6 font-semibold">
+                      Записаться в демозал
+                    </Button>
+                  </div>
+                </div>
+                <div className="relative min-h-[400px] lg:min-h-[600px]">
+                  <img
+                    src="https://cdn.poehali.dev/projects/bd9048a7-854b-4d3b-a782-386c5097cafc/files/6daba346-ca07-428c-ac88-849d4a8dd86a.jpg"
+                    alt="Промышленное оборудование"
+                    className="absolute inset-0 w-full h-full object-cover"
+                  />
+                </div>
               </div>
-            </div>
-            <div className="relative">
-              <img
-                src="https://cdn.poehali.dev/projects/bd9048a7-854b-4d3b-a782-386c5097cafc/files/6daba346-ca07-428c-ac88-849d4a8dd86a.jpg"
-                alt="Промышленное оборудование"
-                className="rounded-lg shadow-2xl w-full"
-              />
-            </div>
+            </Card>
           </div>
         </div>
       </section>
@@ -487,8 +465,8 @@ const Index = () => {
                 />
               </div>
               <CardContent className="p-6">
-                <h3 className="font-bold text-lg mb-3">Производительность от 300 до 10 000 кг/ч</h3>
-                <p className="text-muted-foreground text-sm">Фактическая производительность нашего оборудования соответствует указанному в КП. Подберём модель под ваш объём и потребности</p>
+                <h3 className="font-bold text-xl mb-3">Производительность от 300 до 10 000 кг/ч</h3>
+                <p className="text-muted-foreground text-base">Фактическая производительность нашего оборудования соответствует указанному в КП. Подберём модель под ваш объём и потребности</p>
               </CardContent>
             </Card>
             <Card className="hover-scale overflow-hidden">
@@ -500,8 +478,8 @@ const Index = () => {
                 />
               </div>
               <CardContent className="p-6">
-                <h3 className="font-bold text-lg mb-3">Высокое качество реза</h3>
-                <p className="text-muted-foreground text-sm">Гарантируем высокое качество реза, нужную температуру, однородность фарша. Посмотреть модели в наличии можно в наших демозалах в Москве и Новосибирске</p>
+                <h3 className="font-bold text-xl mb-3">Высокое качество реза</h3>
+                <p className="text-muted-foreground text-base">Гарантируем высокое качество реза, нужную температуру, однородность фарша. Посмотреть модели в наличии можно в наших демозалах в Москве и Новосибирске</p>
               </CardContent>
             </Card>
             <Card className="hover-scale overflow-hidden">
@@ -513,8 +491,8 @@ const Index = () => {
                 />
               </div>
               <CardContent className="p-6">
-                <h3 className="font-bold text-lg mb-3">Легкая разборка и мойка</h3>
-                <p className="text-muted-foreground text-sm">Оборудование легко разбирается и моется. Оборудование полностью соответствует требованиям пищевой безопасности и САНПИНам</p>
+                <h3 className="font-bold text-xl mb-3">Легкая разборка и мойка</h3>
+                <p className="text-muted-foreground text-base">Оборудование легко разбирается и моется. Оборудование полностью соответствует требованиям пищевой безопасности и САНПИНам</p>
               </CardContent>
             </Card>
             <Card className="hover-scale overflow-hidden">
@@ -526,8 +504,8 @@ const Index = () => {
                 />
               </div>
               <CardContent className="p-6">
-                <h3 className="font-bold text-lg mb-3">Простота в эксплуатации</h3>
-                <p className="text-muted-foreground text-sm">Оборудование просто в эксплуатации. В наличие запчасти и консультация наших сервисных специалистов. Осуществляем ПНР при необходимости</p>
+                <h3 className="font-bold text-xl mb-3">Простота в эксплуатации</h3>
+                <p className="text-muted-foreground text-base">Оборудование просто в эксплуатации. В наличие запчасти и консультация наших сервисных специалистов. Осуществляем ПНР при необходимости</p>
               </CardContent>
             </Card>
             <Card className="hover-scale overflow-hidden">
@@ -539,8 +517,8 @@ const Index = () => {
                 />
               </div>
               <CardContent className="p-6">
-                <h3 className="font-bold text-lg mb-3">Пакет документов под тендер</h3>
-                <p className="text-muted-foreground text-sm">При необходимости соберём пакет документов под тендер и дадим 2–3 альтернативы по бюджету и срокам</p>
+                <h3 className="font-bold text-xl mb-3">Пакет документов под тендер</h3>
+                <p className="text-muted-foreground text-base">При необходимости соберём пакет документов под тендер и дадим 2–3 альтернативы по бюджету и срокам</p>
               </CardContent>
             </Card>
             <Card className="hover-scale overflow-hidden">
@@ -552,8 +530,8 @@ const Index = () => {
                 />
               </div>
               <CardContent className="p-6">
-                <h3 className="font-bold text-lg mb-3">Подбор комплекта для новых цехов</h3>
-                <p className="text-muted-foreground text-sm">Для новых цехов бесплатно сделаем подбор комплекта и дорожную карту запуска</p>
+                <h3 className="font-bold text-xl mb-3">Подбор комплекта для новых цехов</h3>
+                <p className="text-muted-foreground text-base">Для новых цехов бесплатно сделаем подбор комплекта и дорожную карту запуска</p>
               </CardContent>
             </Card>
             <Card className="hover-scale overflow-hidden">
@@ -565,8 +543,8 @@ const Index = () => {
                 />
               </div>
               <CardContent className="p-6">
-                <h3 className="font-bold text-lg mb-3">Гарантия 12 месяцев</h3>
-                <p className="text-muted-foreground text-sm">Полная гарантия на оборудование сроком 12 месяцев с момента запуска</p>
+                <h3 className="font-bold text-xl mb-3">Гарантия 12 месяцев</h3>
+                <p className="text-muted-foreground text-base">Полная гарантия на оборудование сроком 12 месяцев с момента запуска</p>
               </CardContent>
             </Card>
             <Card className="hover-scale overflow-hidden">
@@ -703,7 +681,7 @@ const Index = () => {
                     <span className="text-accent font-semibold">{item.capacity}</span>
                   </div>
                   <p className="text-muted-foreground mb-4">{item.description}</p>
-                  <Button className="w-full bg-accent hover:bg-accent/90 text-accent-foreground">
+                  <Button className="w-full bg-accent hover:bg-accent/90 text-accent-foreground" onClick={() => openModal('Запросить КП')}>
                     Узнать цену
                   </Button>
                 </CardContent>
@@ -845,9 +823,10 @@ const Index = () => {
                       </label>
                     </div>
                     <Button 
-                      type="submit" 
+                      type="button"
                       size="lg" 
                       className="w-full bg-accent hover:bg-accent/90 text-accent-foreground font-semibold"
+                      onClick={() => openModal('Получить подборку')}
                     >
                       Получить подборку
                     </Button>
@@ -884,82 +863,98 @@ const Index = () => {
             <h2 className="text-4xl md:text-5xl font-bold mb-4">Частые вопросы</h2>
           </div>
           
-          <div className="grid md:grid-cols-4 gap-4 mb-12">
-            <button
-              onClick={() => setSelectedRole('director')}
-              className={`relative overflow-hidden rounded-lg transition-all ${
-                selectedRole === 'director' ? 'ring-4 ring-accent' : ''
-              }`}
-            >
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <Card className="overflow-hidden">
               <img 
-                src={roleImages.director} 
+                src="https://cdn.poehali.dev/projects/bd9048a7-854b-4d3b-a782-386c5097cafc/files/a58b4558-9697-4b42-845a-ab0e50aa74f2.jpg"
                 alt="Директор" 
-                className="w-full h-48 object-cover"
+                className="w-full h-80 object-cover"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-4">
-                <span className="text-white font-semibold text-lg">Директор</span>
-              </div>
-            </button>
-            <button
-              onClick={() => setSelectedRole('engineer')}
-              className={`relative overflow-hidden rounded-lg transition-all ${
-                selectedRole === 'engineer' ? 'ring-4 ring-accent' : ''
-              }`}
-            >
-              <img 
-                src={roleImages.engineer} 
-                alt="Инженер" 
-                className="w-full h-48 object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-4">
-                <span className="text-white font-semibold text-lg">Инженер</span>
-              </div>
-            </button>
-            <button
-              onClick={() => setSelectedRole('technologist')}
-              className={`relative overflow-hidden rounded-lg transition-all ${
-                selectedRole === 'technologist' ? 'ring-4 ring-accent' : ''
-              }`}
-            >
-              <img 
-                src={roleImages.technologist} 
-                alt="Технолог" 
-                className="w-full h-48 object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-4">
-                <span className="text-white font-semibold text-lg">Технолог</span>
-              </div>
-            </button>
-            <button
-              onClick={() => setSelectedRole('purchaser')}
-              className={`relative overflow-hidden rounded-lg transition-all ${
-                selectedRole === 'purchaser' ? 'ring-4 ring-accent' : ''
-              }`}
-            >
-              <img 
-                src={roleImages.purchaser} 
-                alt="Закупщик" 
-                className="w-full h-48 object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-4">
-                <span className="text-white font-semibold text-lg">Закупщик</span>
-              </div>
-            </button>
-          </div>
+              <CardContent className="p-6">
+                <h3 className="text-xl font-bold mb-4 text-center">Директор</h3>
+                <Accordion type="single" collapsible className="space-y-2">
+                  {faqData.director.map((faq, index) => (
+                    <AccordionItem key={index} value={`director-${index}`}>
+                      <AccordionTrigger className="text-left text-sm font-semibold hover:text-accent">
+                        {faq.question}
+                      </AccordionTrigger>
+                      <AccordionContent className="text-sm text-muted-foreground">
+                        {faq.answer}
+                      </AccordionContent>
+                    </AccordionItem>
+                  ))}
+                </Accordion>
+              </CardContent>
+            </Card>
 
-          <div className="max-w-3xl mx-auto">
-            <Accordion type="single" collapsible className="space-y-4">
-              {faqData[selectedRole as keyof typeof faqData].map((faq, index) => (
-                <AccordionItem key={index} value={`item-${index}`} className="bg-background rounded-lg px-6">
-                  <AccordionTrigger className="text-left font-semibold hover:text-accent">
-                    {faq.question}
-                  </AccordionTrigger>
-                  <AccordionContent className="text-muted-foreground">
-                    {faq.answer}
-                  </AccordionContent>
-                </AccordionItem>
-              ))}
-            </Accordion>
+            <Card className="overflow-hidden">
+              <img 
+                src="https://cdn.poehali.dev/projects/bd9048a7-854b-4d3b-a782-386c5097cafc/files/9ec9ea66-abef-4e2e-a9bf-b82e196cbce2.jpg"
+                alt="Инженер" 
+                className="w-full h-80 object-cover"
+              />
+              <CardContent className="p-6">
+                <h3 className="text-xl font-bold mb-4 text-center">Инженер</h3>
+                <Accordion type="single" collapsible className="space-y-2">
+                  {faqData.engineer.map((faq, index) => (
+                    <AccordionItem key={index} value={`engineer-${index}`}>
+                      <AccordionTrigger className="text-left text-sm font-semibold hover:text-accent">
+                        {faq.question}
+                      </AccordionTrigger>
+                      <AccordionContent className="text-sm text-muted-foreground">
+                        {faq.answer}
+                      </AccordionContent>
+                    </AccordionItem>
+                  ))}
+                </Accordion>
+              </CardContent>
+            </Card>
+
+            <Card className="overflow-hidden">
+              <img 
+                src="https://cdn.poehali.dev/projects/bd9048a7-854b-4d3b-a782-386c5097cafc/files/4974227d-c3cb-40b4-94ce-7110037b6903.jpg"
+                alt="Технолог" 
+                className="w-full h-80 object-cover"
+              />
+              <CardContent className="p-6">
+                <h3 className="text-xl font-bold mb-4 text-center">Технолог</h3>
+                <Accordion type="single" collapsible className="space-y-2">
+                  {faqData.technologist.map((faq, index) => (
+                    <AccordionItem key={index} value={`technologist-${index}`}>
+                      <AccordionTrigger className="text-left text-sm font-semibold hover:text-accent">
+                        {faq.question}
+                      </AccordionTrigger>
+                      <AccordionContent className="text-sm text-muted-foreground">
+                        {faq.answer}
+                      </AccordionContent>
+                    </AccordionItem>
+                  ))}
+                </Accordion>
+              </CardContent>
+            </Card>
+
+            <Card className="overflow-hidden">
+              <img 
+                src="https://cdn.poehali.dev/projects/bd9048a7-854b-4d3b-a782-386c5097cafc/files/d368157e-93c4-4dbe-9217-d31b1e48e26d.jpg"
+                alt="Закупщик" 
+                className="w-full h-80 object-cover"
+              />
+              <CardContent className="p-6">
+                <h3 className="text-xl font-bold mb-4 text-center">Закупщик</h3>
+                <Accordion type="single" collapsible className="space-y-2">
+                  {faqData.purchaser.map((faq, index) => (
+                    <AccordionItem key={index} value={`purchaser-${index}`}>
+                      <AccordionTrigger className="text-left text-sm font-semibold hover:text-accent">
+                        {faq.question}
+                      </AccordionTrigger>
+                      <AccordionContent className="text-sm text-muted-foreground">
+                        {faq.answer}
+                      </AccordionContent>
+                    </AccordionItem>
+                  ))}
+                </Accordion>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </section>
@@ -994,6 +989,44 @@ const Index = () => {
           </div>
         </div>
       </footer>
+
+      <Dialog open={showModal} onOpenChange={setShowModal}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>{modalTitle}</DialogTitle>
+          </DialogHeader>
+          <form onSubmit={(e) => { e.preventDefault(); /* handle submit */ }} className="space-y-4">
+            <div>
+              <Label htmlFor="modal-name">Имя *</Label>
+              <Input
+                id="modal-name"
+                placeholder="Ваше имя"
+                value={formData.name}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              />
+            </div>
+            <div>
+              <Label htmlFor="modal-phone">Телефон *</Label>
+              <Input
+                id="modal-phone"
+                type="tel"
+                placeholder="+7 (___) ___-__-__"
+                value={formData.phone}
+                onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+              />
+            </div>
+            <div className="flex items-start gap-2">
+              <Checkbox id="modal-agree" checked={agreed} onCheckedChange={(checked) => setAgreed(checked as boolean)} />
+              <label htmlFor="modal-agree" className="text-sm cursor-pointer">
+                Я согласен с <a href="#" className="text-accent underline">политикой конфиденциальности</a>
+              </label>
+            </div>
+            <Button type="submit" size="lg" className="w-full bg-accent hover:bg-accent/90 text-accent-foreground font-semibold">
+              Отправить
+            </Button>
+          </form>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

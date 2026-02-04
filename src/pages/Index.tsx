@@ -95,23 +95,23 @@ const Index = () => {
 
   const advantages = [
     {
-      icon: 'Factory',
+      image: 'https://cdn.poehali.dev/projects/bd9048a7-854b-4d3b-a782-386c5097cafc/files/3b82465c-afcd-4254-b9ae-c0389faf7ba9.jpg',
       text: 'Прямые поставки с заводов — фиксируем комплектацию и сроки',
     },
     {
-      icon: 'Store',
+      image: 'https://cdn.poehali.dev/projects/bd9048a7-854b-4d3b-a782-386c5097cafc/files/7256c038-3d31-4484-a7ac-1acb394c7254.jpg',
       text: 'Демозалы МСК/НСК — покажем узлы и обслуживание',
     },
     {
-      icon: 'Settings',
+      image: 'https://cdn.poehali.dev/projects/bd9048a7-854b-4d3b-a782-386c5097cafc/files/6daba346-ca07-428c-ac88-849d4a8dd86a.jpg',
       text: 'Подбор под продукт — ножи/решётки/режимы',
     },
     {
-      icon: 'Clock',
+      image: 'https://cdn.poehali.dev/projects/bd9048a7-854b-4d3b-a782-386c5097cafc/files/b001e360-62cc-4ac3-b27b-6638fa567113.jpg',
       text: 'Быстрые сроки — под ваш дедлайн',
     },
     {
-      icon: 'Wrench',
+      image: 'https://cdn.poehali.dev/projects/bd9048a7-854b-4d3b-a782-386c5097cafc/files/0d0f8beb-1ac3-4a9f-a5b2-e264c07a787d.jpg',
       text: 'Сервис — пусконаладка, гарантия, запчасти',
     },
   ];
@@ -364,82 +364,224 @@ const Index = () => {
         </div>
       </header>
 
-      <section className="relative py-20 md:py-32 bg-gradient-to-br from-primary/5 to-accent/5 overflow-hidden">
-        <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
+      <section className="relative py-20 md:py-32 bg-gradient-to-br from-primary to-primary/90 text-primary-foreground overflow-hidden">
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute inset-0" style={{
+            backgroundImage: `url(https://cdn.poehali.dev/projects/bd9048a7-854b-4d3b-a782-386c5097cafc/files/b001e360-62cc-4ac3-b27b-6638fa567113.jpg)`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+          }} />
+        </div>
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="animate-fade-in">
-              <Badge className="mb-4 bg-accent text-accent-foreground">8 ведущих брендов</Badge>
-              <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
-                Волчки и куттеры для мясопереработки
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
+                Промышленные мясорубки, волчки и куттеры от 300–10 000 кг/ч
               </h1>
-              <p className="text-xl text-muted-foreground mb-8">
-                Подберём под ваш кг/ч и продукт. Демозалы в МСК и НСК — покажем работу вживую
+              <p className="text-xl md:text-2xl mb-8 opacity-95">
+                Прямые поставки от ведущих европейских и азиатских производителей
               </p>
-              <div className="flex flex-wrap gap-4 mb-8">
-                <div className="flex items-center gap-2">
-                  <Icon name="Check" className="text-accent w-5 h-5" />
-                  <span>Сертифицировано</span>
+              <div className="space-y-4 mb-8">
+                <div className="flex items-start gap-3">
+                  <Icon name="CheckCircle2" className="w-6 h-6 text-accent flex-shrink-0 mt-1" />
+                  <p className="text-lg">Цена без лишних наценок: поставки напрямую от производителей</p>
                 </div>
-                <div className="flex items-center gap-2">
-                  <Icon name="Check" className="text-accent w-5 h-5" />
-                  <span>Запчасти на складе</span>
+                <div className="flex items-start gap-3">
+                  <Icon name="CheckCircle2" className="w-6 h-6 text-accent flex-shrink-0 mt-1" />
+                  <p className="text-lg">Проверяем товар перед покупкой. Можем продемонстрировать работу узлов и оборудования в нашем шоуруме в Москве и Новосибирске</p>
                 </div>
-                <div className="flex items-center gap-2">
-                  <Icon name="Check" className="text-accent w-5 h-5" />
-                  <span>Гарантия и сервис</span>
+                <div className="flex items-start gap-3">
+                  <Icon name="CheckCircle2" className="w-6 h-6 text-accent flex-shrink-0 mt-1" />
+                  <p className="text-lg">Гарантируем качество оборудования – услуги пусконаладки, большой склад запчастей, техподдержка</p>
                 </div>
               </div>
-              <Button size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground font-semibold">
-                Получить консультацию
-              </Button>
-            </div>
-            <div className="relative animate-fade-in">
-              <img
-                src="https://cdn.poehali.dev/projects/bd9048a7-854b-4d3b-a782-386c5097cafc/files/ae2da679-b284-4a5b-88ef-6348e86708f4.jpg"
-                alt="Оборудование"
-                className="rounded-lg shadow-2xl"
-              />
-              <div className="absolute -bottom-6 -left-6 bg-primary text-primary-foreground p-6 rounded-lg shadow-xl">
-                <div className="text-3xl font-bold">300+</div>
-                <div className="text-sm">Установок по РФ</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="py-12 bg-primary text-primary-foreground">
-        <div className="container mx-auto px-4">
-          <div className="flex flex-wrap justify-center items-center gap-8">
-            {brands.map((brand, index) => (
-              <div key={index} className="text-lg font-semibold opacity-80 hover:opacity-100 transition-opacity">
-                {brand}
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section id="equipment" className="py-20">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12 animate-fade-in">
-            <h2 className="text-4xl md:text-5xl font-bold mb-4">
-              5 проблем устаревшего оборудования
-            </h2>
-            <p className="text-xl text-muted-foreground">
-              Почему мясокомбинаты обращаются к нам
-            </p>
-          </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-6">
-            {problems.map((problem, index) => (
-              <Card key={index} className="hover-scale">
-                <CardContent className="p-6">
-                  <Icon name={problem.icon} className="w-12 h-12 text-accent mb-4" />
-                  <h3 className="text-lg font-semibold mb-2">{problem.title}</h3>
-                  <p className="text-sm text-muted-foreground">{problem.description}</p>
+              <Card className="bg-white shadow-2xl mb-8">
+                <CardContent className="p-8">
+                  <h3 className="text-2xl font-bold text-foreground mb-6">Получить подбор и КП</h3>
+                  <form className="space-y-4">
+                    <div>
+                      <Label htmlFor="hero-name" className="text-foreground">Имя *</Label>
+                      <Input
+                        id="hero-name"
+                        placeholder="Ваше имя"
+                        className="mt-2"
+                        value={formData.name}
+                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="hero-phone" className="text-foreground">Телефон *</Label>
+                      <Input
+                        id="hero-phone"
+                        type="tel"
+                        placeholder="+7 (___) ___-__-__"
+                        className="mt-2"
+                        value={formData.phone}
+                        onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                      />
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <Checkbox id="hero-agree" checked={agreed} onCheckedChange={(checked) => setAgreed(checked as boolean)} />
+                      <label htmlFor="hero-agree" className="text-sm text-muted-foreground cursor-pointer">
+                        Я согласен с <a href="#" className="text-accent underline">политикой конфиденциальности</a>
+                      </label>
+                    </div>
+                    <Button type="submit" size="lg" className="w-full bg-accent hover:bg-accent/90 text-accent-foreground font-semibold">
+                      Отправить
+                    </Button>
+                  </form>
                 </CardContent>
               </Card>
+              <div className="flex flex-wrap gap-4">
+                <Button size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground text-lg px-8 py-6">
+                  Подобрать модель
+                </Button>
+                <Button size="lg" className="border-2 border-primary-foreground bg-primary-foreground text-primary hover:bg-primary-foreground/90 text-lg px-8 py-6 font-semibold">
+                  Записаться в демозал
+                </Button>
+              </div>
+            </div>
+            <div className="relative">
+              <img
+                src="https://cdn.poehali.dev/projects/bd9048a7-854b-4d3b-a782-386c5097cafc/files/6daba346-ca07-428c-ac88-849d4a8dd86a.jpg"
+                alt="Промышленное оборудование"
+                className="rounded-lg shadow-2xl w-full"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="equipment" className="py-20 bg-secondary">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12 animate-fade-in">
+            <h2 className="text-4xl md:text-5xl font-bold mb-4">Оборудование от производителей Европы и Китая</h2>
+            <p className="text-xl text-muted-foreground">
+              Волчки: Германия, Италия, Испания, Польша, Китай. Куттеры: 300–10 000 кг/ч.
+            </p>
+          </div>
+          <div className="flex flex-wrap justify-center gap-4">
+            {brands.map((brand, index) => (
+              <Badge key={index} variant="outline" className="text-base px-6 py-3 hover-scale cursor-pointer border-2">
+                {brand}
+              </Badge>
             ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="py-20">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12 animate-fade-in">
+            <h2 className="text-4xl md:text-5xl font-bold mb-6">
+              Наши преимущества
+            </h2>
+          </div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <Card className="hover-scale overflow-hidden">
+              <div className="h-48 overflow-hidden">
+                <img
+                  src="https://cdn.poehali.dev/projects/bd9048a7-854b-4d3b-a782-386c5097cafc/files/ae2da679-b284-4a5b-88ef-6348e86708f4.jpg"
+                  alt="Производительность"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <CardContent className="p-6">
+                <h3 className="font-bold text-lg mb-3">Производительность от 300 до 10 000 кг/ч</h3>
+                <p className="text-muted-foreground text-sm">Фактическая производительность нашего оборудования соответствует указанному в КП. Подберём модель под ваш объём и потребности</p>
+              </CardContent>
+            </Card>
+            <Card className="hover-scale overflow-hidden">
+              <div className="h-48 overflow-hidden">
+                <img
+                  src="https://cdn.poehali.dev/projects/bd9048a7-854b-4d3b-a782-386c5097cafc/files/7b013632-f614-4727-b6df-5b716a8b8008.jpg"
+                  alt="Качество"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <CardContent className="p-6">
+                <h3 className="font-bold text-lg mb-3">Высокое качество реза</h3>
+                <p className="text-muted-foreground text-sm">Гарантируем высокое качество реза, нужную температуру, однородность фарша. Посмотреть модели в наличии можно в наших демозалах в Москве и Новосибирске</p>
+              </CardContent>
+            </Card>
+            <Card className="hover-scale overflow-hidden">
+              <div className="h-48 overflow-hidden">
+                <img
+                  src="https://cdn.poehali.dev/projects/bd9048a7-854b-4d3b-a782-386c5097cafc/files/b001e360-62cc-4ac3-b27b-6638fa567113.jpg"
+                  alt="Безопасность"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <CardContent className="p-6">
+                <h3 className="font-bold text-lg mb-3">Легкая разборка и мойка</h3>
+                <p className="text-muted-foreground text-sm">Оборудование легко разбирается и моется. Оборудование полностью соответствует требованиям пищевой безопасности и САНПИНам</p>
+              </CardContent>
+            </Card>
+            <Card className="hover-scale overflow-hidden">
+              <div className="h-48 overflow-hidden">
+                <img
+                  src="https://cdn.poehali.dev/projects/bd9048a7-854b-4d3b-a782-386c5097cafc/files/0d0f8beb-1ac3-4a9f-a5b2-e264c07a787d.jpg"
+                  alt="Сервис"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <CardContent className="p-6">
+                <h3 className="font-bold text-lg mb-3">Простота в эксплуатации</h3>
+                <p className="text-muted-foreground text-sm">Оборудование просто в эксплуатации. В наличие запчасти и консультация наших сервисных специалистов. Осуществляем ПНР при необходимости</p>
+              </CardContent>
+            </Card>
+            <Card className="hover-scale overflow-hidden">
+              <div className="h-48 overflow-hidden">
+                <img
+                  src="https://cdn.poehali.dev/projects/bd9048a7-854b-4d3b-a782-386c5097cafc/files/ae2da679-b284-4a5b-88ef-6348e86708f4.jpg"
+                  alt="Тендер"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <CardContent className="p-6">
+                <h3 className="font-bold text-lg mb-3">Пакет документов под тендер</h3>
+                <p className="text-muted-foreground text-sm">При необходимости соберём пакет документов под тендер и дадим 2–3 альтернативы по бюджету и срокам</p>
+              </CardContent>
+            </Card>
+            <Card className="hover-scale overflow-hidden">
+              <div className="h-48 overflow-hidden">
+                <img
+                  src="https://cdn.poehali.dev/projects/bd9048a7-854b-4d3b-a782-386c5097cafc/files/7b013632-f614-4727-b6df-5b716a8b8008.jpg"
+                  alt="Новый цех"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <CardContent className="p-6">
+                <h3 className="font-bold text-lg mb-3">Подбор комплекта для новых цехов</h3>
+                <p className="text-muted-foreground text-sm">Для новых цехов бесплатно сделаем подбор комплекта и дорожную карту запуска</p>
+              </CardContent>
+            </Card>
+            <Card className="hover-scale overflow-hidden">
+              <div className="h-48 overflow-hidden">
+                <img
+                  src="https://cdn.poehali.dev/projects/bd9048a7-854b-4d3b-a782-386c5097cafc/files/b001e360-62cc-4ac3-b27b-6638fa567113.jpg"
+                  alt="Гарантия"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <CardContent className="p-6">
+                <h3 className="font-bold text-lg mb-3">Гарантия 12 месяцев</h3>
+                <p className="text-muted-foreground text-sm">Полная гарантия на оборудование сроком 12 месяцев с момента запуска</p>
+              </CardContent>
+            </Card>
+            <Card className="hover-scale overflow-hidden">
+              <div className="h-48 overflow-hidden">
+                <img
+                  src="https://cdn.poehali.dev/projects/bd9048a7-854b-4d3b-a782-386c5097cafc/files/0d0f8beb-1ac3-4a9f-a5b2-e264c07a787d.jpg"
+                  alt="Доставка"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <CardContent className="p-6">
+                <h3 className="font-bold text-lg mb-3">Доставка по всей России</h3>
+                <p className="text-muted-foreground text-sm">Доставка по все России до терминала транспортной компании или Вашего производства</p>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </section>
@@ -453,9 +595,15 @@ const Index = () => {
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-6">
             {advantages.map((advantage, index) => (
-              <Card key={index} className="hover-scale bg-primary text-primary-foreground border-none">
+              <Card key={index} className="hover-scale overflow-hidden">
+                <div className="h-64 overflow-hidden">
+                  <img
+                    src={advantage.image}
+                    alt={advantage.text}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
                 <CardContent className="p-6 text-center">
-                  <Icon name={advantage.icon} className="w-12 h-12 mx-auto mb-4" />
                   <p className="text-sm leading-relaxed">{advantage.text}</p>
                 </CardContent>
               </Card>

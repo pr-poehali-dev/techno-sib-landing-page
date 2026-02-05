@@ -390,17 +390,6 @@ const Index = () => {
     ],
   };
 
-  const filteredEquipment = equipment.filter(item => {
-    if (filterType !== 'all' && item.type !== filterType) return false;
-    if (filterCapacity !== 'all') {
-      const capacity = parseInt(item.capacity);
-      if (filterCapacity === 'small' && capacity > 1000) return false;
-      if (filterCapacity === 'medium' && (capacity <= 1000 || capacity > 5000)) return false;
-      if (filterCapacity === 'large' && capacity <= 5000) return false;
-    }
-    return true;
-  });
-
   return (
     <div className="min-h-screen bg-background">
       <header className="sticky top-0 z-50 bg-primary text-primary-foreground shadow-lg">

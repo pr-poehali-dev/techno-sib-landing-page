@@ -54,8 +54,16 @@ const Index = () => {
       const response = await fetch('https://functions.poehali.dev/91d69da5-6c30-42df-b916-1d740ca6830d?refresh=true');
       const data = await response.json();
       console.log('Catalog loaded:', data.products?.length, 'products');
+      console.log('Total images found:', data.total_images_found);
+      console.log('Products with images:', data.products_with_images);
       if (data.products?.length > 0) {
+        console.log('First product debug params:', data.products[0].debug_all_params);
         console.log('First product images:', data.products[0].additional_images);
+        const productsWithImages = data.products.filter((p: any) => p.additional_images && p.additional_images.length > 0);
+        console.log('Products with images (frontend count):', productsWithImages.length);
+        if (productsWithImages.length > 0) {
+          console.log('First product with images:', productsWithImages[0]);
+        }
       }
       
       if (data.products) {
@@ -485,14 +493,19 @@ const Index = () => {
                       </div>
                     </>
                   ) : (
-                    <video
-                      src="https://cdn.poehali.dev/projects/bd9048a7-854b-4d3b-a782-386c5097cafc/bucket/DRB%20JR-120%20%D0%92%D0%BE%D0%BB%D1%87%D0%BE%D0%BA%20%D0%A2%D0%A1%D0%93.mp4"
-                      controls
-                      autoPlay
-                      muted
-                      playsInline
-                      className="w-full h-full object-contain"
-                    />
+                    <div className="w-full h-full flex items-center justify-center bg-black">
+                      <video
+                        src="https://cdn.poehali.dev/projects/bd9048a7-854b-4d3b-a782-386c5097cafc/bucket/DRB%20JR-120%20%D0%92%D0%BE%D0%BB%D1%87%D0%BE%D0%BA%20%D0%A2%D0%A1%D0%93.mp4"
+                        controls
+                        autoPlay
+                        muted
+                        playsInline
+                        className="max-w-full max-h-full"
+                        onError={(e) => console.error('Video error:', e)}
+                        onLoadStart={() => console.log('Video loading started')}
+                        onCanPlay={() => console.log('Video can play')}
+                      />
+                    </div>
                   )}
                 </div>
               </div>

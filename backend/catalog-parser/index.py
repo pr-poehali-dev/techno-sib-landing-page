@@ -68,6 +68,7 @@ def handler(event, context):
         
         products = []
         target_categories = [220, 221, 226, 457]
+        total_images_found = 0
         
         for offer in shop.findall('.//offer'):
             offer_id = offer.get('id')
@@ -91,6 +92,8 @@ def handler(event, context):
             params_full = []
             additional_images = []
             
+            all_param_names = [p.get('name') for p in offer.findall('param')]
+            
             for param in offer.findall('param'):
                 param_name = param.get('name')
                 param_value = param.text
@@ -102,6 +105,7 @@ def handler(event, context):
                         if img_url.startswith('/'):
                             img_url = 'https://t-sib.ru' + img_url
                         additional_images.append(img_url)
+                        total_images_found += 1
                     continue
                 
                 if param_name == 'Видео (ссылка)':
@@ -130,14 +134,19 @@ def handler(event, context):
                 'description': description.text if description is not None else '',
                 'params': params,
                 'params_preview': params_preview[:5],
-                'params_full': params_full
+                'params_full': params_full,
+                'debug_all_params': all_param_names[:10]
             }
             
             products.append(product)
         
+        products_with_images = [p for p in products if p['additional_images']]
+        
         response_body = json.dumps({
             'products': products,
             'total': len(products),
+            'total_images_found': total_images_found,
+            'products_with_images': len(products_with_images),
             'updated_at': datetime.utcnow().isoformat()
         }, ensure_ascii=False)
         

@@ -42,6 +42,9 @@ const Index = () => {
   const [showVideo, setShowVideo] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [productImageIndexes, setProductImageIndexes] = useState<{[key: string]: number}>({});
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [lightboxImages, setLightboxImages] = useState<string[]>([]);
+  const [lightboxIndex, setLightboxIndex] = useState(0);
 
   // Загружаем каталог при монтировании компонента
   useEffect(() => {
@@ -498,13 +501,13 @@ const Index = () => {
                         src="https://cdn.poehali.dev/projects/bd9048a7-854b-4d3b-a782-386c5097cafc/bucket/DRB%20JR-120%20%D0%92%D0%BE%D0%BB%D1%87%D0%BE%D0%BA%20%D0%A2%D0%A1%D0%93.mp4"
                         controls
                         autoPlay
-                        muted
-                        playsInline
+                        loop
                         className="max-w-full max-h-full"
-                        onError={(e) => console.error('Video error:', e)}
-                        onLoadStart={() => console.log('Video loading started')}
-                        onCanPlay={() => console.log('Video can play')}
-                      />
+                        style={{ maxHeight: '600px' }}
+                      >
+                        <source src="https://cdn.poehali.dev/projects/bd9048a7-854b-4d3b-a782-386c5097cafc/bucket/DRB%20JR-120%20%D0%92%D0%BE%D0%BB%D1%87%D0%BE%D0%BA%20%D0%A2%D0%A1%D0%93.mp4" type="video/mp4" />
+                        Ваш браузер не поддерживает воспроизведение видео.
+                      </video>
                     </div>
                   )}
                 </div>
@@ -709,7 +712,12 @@ const Index = () => {
                       <img 
                         src={product.additional_images[productImageIndexes[product.id] || 0] || product.picture} 
                         alt={product.name} 
-                        className="w-full h-full object-contain"
+                        className="w-full h-full object-contain cursor-pointer"
+                        onClick={() => {
+                          setLightboxImages(product.additional_images);
+                          setLightboxIndex(productImageIndexes[product.id] || 0);
+                          setLightboxOpen(true);
+                        }}
                       />
                       {product.additional_images.length > 1 && (
                         <>
@@ -1291,7 +1299,12 @@ const Index = () => {
                       <img 
                         src={selectedProduct.additional_images[currentImageIndex] || selectedProduct.picture} 
                         alt={selectedProduct.name} 
-                        className="w-full h-full object-contain"
+                        className="w-full h-full object-contain cursor-pointer"
+                        onClick={() => {
+                          setLightboxImages(selectedProduct.additional_images);
+                          setLightboxIndex(currentImageIndex);
+                          setLightboxOpen(true);
+                        }}
                       />
                     </div>
                     {selectedProduct.additional_images.length > 1 && (
@@ -1324,7 +1337,12 @@ const Index = () => {
                   <img 
                     src={selectedProduct.picture} 
                     alt={selectedProduct.name} 
-                    className="w-full h-80 object-contain rounded-lg bg-secondary"
+                    className="w-full h-80 object-contain rounded-lg bg-secondary cursor-pointer"
+                    onClick={() => {
+                      setLightboxImages([selectedProduct.picture]);
+                      setLightboxIndex(0);
+                      setLightboxOpen(true);
+                    }}
                   />
                 )}
                 
@@ -1372,6 +1390,50 @@ const Index = () => {
               </div>
             </>
           )}
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={lightboxOpen} onOpenChange={setLightboxOpen}>
+        <DialogContent className="sm:max-w-[90vw] max-w-[95vw] h-[90vh] p-0 bg-black/95">
+          <div className="relative w-full h-full flex items-center justify-center">
+            <img 
+              src={lightboxImages[lightboxIndex]} 
+              alt="Увеличенное изображение" 
+              className="max-w-full max-h-full object-contain"
+            />
+            {lightboxImages.length > 1 && (
+              <>
+                <button
+                  onClick={() => setLightboxIndex((prev) => (prev === 0 ? lightboxImages.length - 1 : prev - 1))}
+                  className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white p-3 rounded-full shadow-xl z-10"
+                >
+                  <Icon name="ChevronLeft" className="w-8 h-8" />
+                </button>
+                <button
+                  onClick={() => setLightboxIndex((prev) => (prev === lightboxImages.length - 1 ? 0 : prev + 1))}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white p-3 rounded-full shadow-xl z-10"
+                >
+                  <Icon name="ChevronRight" className="w-8 h-8" />
+                </button>
+                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
+                  {lightboxImages.map((_: string, idx: number) => (
+                    <button
+                      key={idx}
+                      onClick={() => setLightboxIndex(idx)}
+                      className={`w-3 h-3 rounded-full transition-all ${
+                        idx === lightboxIndex 
+                          ? 'bg-white w-8' 
+                          : 'bg-white/50 hover:bg-white/80'
+                      }`}
+                    />
+                  ))}
+                </div>
+                <div className="absolute top-4 right-4 text-white text-lg font-semibold bg-black/50 px-4 py-2 rounded-full">
+                  {lightboxIndex + 1} / {lightboxImages.length}
+                </div>
+              </>
+            )}
+          </div>
         </DialogContent>
       </Dialog>
     </div>

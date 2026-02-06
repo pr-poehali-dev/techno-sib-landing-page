@@ -39,6 +39,8 @@ const Index = () => {
   const [catalogLoading, setCatalogLoading] = useState(true);
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
   const [showProductModal, setShowProductModal] = useState(false);
+  const [showVideo, setShowVideo] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   // Загружаем каталог при монтировании компонента
   useEffect(() => {
@@ -73,6 +75,7 @@ const Index = () => {
 
   const openProductDetails = (product: any) => {
     setSelectedProduct(product);
+    setCurrentImageIndex(0);
     setShowProductModal(true);
   };
 
@@ -458,14 +461,34 @@ const Index = () => {
                   </div>
                 </div>
                 <div className="relative min-h-[400px] lg:min-h-[600px] bg-black overflow-hidden">
-                  <iframe
-                    src="https://rutube.ru/play/embed/e9f5748185b428a295be966c7cbb4e1e/?p=bVRCNrNe8t8&autoplay=1&muted=1"
-                    frameBorder="0"
-                    allow="clipboard-write; autoplay"
-                    allowFullScreen
-                    className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full min-w-full min-h-full"
-                    style={{ aspectRatio: '16/9' }}
-                  />
+                  {!showVideo ? (
+                    <>
+                      <img
+                        src="https://cdn.poehali.dev/files/2ab1d7e7-f29b-4901-98f8-4d87df2a6b0f.jpg"
+                        alt="Промышленный волчок"
+                        className="w-full h-full object-cover"
+                      />
+                      <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
+                        <Button
+                          size="lg"
+                          onClick={() => setShowVideo(true)}
+                          className="bg-accent hover:bg-accent/90 text-accent-foreground text-xl px-12 py-8 rounded-full shadow-2xl flex items-center gap-3"
+                        >
+                          <Icon name="Play" className="w-8 h-8" />
+                          Смотреть видео
+                        </Button>
+                      </div>
+                    </>
+                  ) : (
+                    <iframe
+                      src="https://rutube.ru/play/embed/e9f5748185b428a295be966c7cbb4e1e/?p=bVRCNrNe8t8&autoplay=1"
+                      frameBorder="0"
+                      allow="clipboard-write; autoplay"
+                      allowFullScreen
+                      className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full min-w-full min-h-full"
+                      style={{ aspectRatio: '16/9' }}
+                    />
+                  )}
                 </div>
               </div>
             </Card>
@@ -1192,11 +1215,48 @@ const Index = () => {
                 <DialogTitle className="text-2xl">{selectedProduct.name}</DialogTitle>
               </DialogHeader>
               <div className="space-y-6">
-                <img 
-                  src={selectedProduct.picture} 
-                  alt={selectedProduct.name} 
-                  className="w-full h-80 object-contain rounded-lg bg-secondary"
-                />
+                {selectedProduct.additional_images && selectedProduct.additional_images.length > 0 ? (
+                  <div className="relative">
+                    <div className="relative w-full h-80 bg-secondary rounded-lg overflow-hidden">
+                      <img 
+                        src={selectedProduct.additional_images[currentImageIndex] || selectedProduct.picture} 
+                        alt={selectedProduct.name} 
+                        className="w-full h-full object-contain"
+                      />
+                    </div>
+                    {selectedProduct.additional_images.length > 1 && (
+                      <>
+                        <button
+                          onClick={() => setCurrentImageIndex((prev) => (prev === 0 ? selectedProduct.additional_images.length - 1 : prev - 1))}
+                          className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white p-2 rounded-full shadow-lg"
+                        >
+                          <Icon name="ChevronLeft" className="w-6 h-6" />
+                        </button>
+                        <button
+                          onClick={() => setCurrentImageIndex((prev) => (prev === selectedProduct.additional_images.length - 1 ? 0 : prev + 1))}
+                          className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white p-2 rounded-full shadow-lg"
+                        >
+                          <Icon name="ChevronRight" className="w-6 h-6" />
+                        </button>
+                        <div className="flex justify-center gap-2 mt-4">
+                          {selectedProduct.additional_images.map((_: any, idx: number) => (
+                            <button
+                              key={idx}
+                              onClick={() => setCurrentImageIndex(idx)}
+                              className={`w-2 h-2 rounded-full transition-all ${idx === currentImageIndex ? 'bg-accent w-8' : 'bg-gray-300'}`}
+                            />
+                          ))}
+                        </div>
+                      </>
+                    )}
+                  </div>
+                ) : (
+                  <img 
+                    src={selectedProduct.picture} 
+                    alt={selectedProduct.name} 
+                    className="w-full h-80 object-contain rounded-lg bg-secondary"
+                  />
+                )}
                 
                 <div>
                   <h3 className="text-3xl font-bold text-accent mb-4">

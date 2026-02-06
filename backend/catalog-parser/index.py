@@ -2,10 +2,15 @@ import json
 import xml.etree.ElementTree as ET
 from urllib.request import urlopen
 from datetime import datetime
+import time
+
+cache = {}
+CACHE_DURATION = 300
 
 def handler(event, context):
     """Парсер XML-фида товаров с фильтрацией по категориям"""
     
+    global cache
     method = event.get('httpMethod', 'GET')
     
     if method == 'OPTIONS':
@@ -21,6 +26,19 @@ def handler(event, context):
         }
     
     try:
+        current_time = time.time()
+        
+        if 'data' in cache and 'timestamp' in cache:
+            if current_time - cache['timestamp'] < CACHE_DURATION:
+                return {
+                    'statusCode': 200,
+                    'headers': {
+                        'Content-Type': 'application/json',
+                        'Access-Control-Allow-Origin': '*'
+                    },
+                    'body': cache['data']
+                }
+        
         xml_url = 'https://t-sib.ru/bitrix/catalog_export/export_Vvf.xml'
         
         with urlopen(xml_url) as response:
@@ -64,15 +82,18 @@ def handler(event, context):
             params = []
             params_preview = []
             params_full = []
-            
-            excluded_params = ['Картинки товара', 'Видео (ссылка)']
+            additional_images = []
             
             for param in offer.findall('param'):
                 param_name = param.get('name')
                 param_value = param.text
                 param_unit = param.get('unit', '')
                 
-                if param_name in excluded_params:
+                if param_name == 'Картинки товара' and param_value:
+                    additional_images = [img.strip() for img in param_value.split(',') if img.strip()]
+                    continue
+                
+                if param_name == 'Видео (ссылка)':
                     continue
                 
                 param_obj = {
@@ -94,6 +115,7 @@ def handler(event, context):
                 'name': name.text if name is not None else '',
                 'price': float(price.text) if price is not None else 0,
                 'picture': picture.text if picture is not None else '',
+                'additional_images': additional_images,
                 'description': description.text if description is not None else '',
                 'params': params,
                 'params_preview': params_preview[:5],
@@ -102,17 +124,22 @@ def handler(event, context):
             
             products.append(product)
         
+        response_body = json.dumps({
+            'products': products,
+            'total': len(products),
+            'updated_at': datetime.utcnow().isoformat()
+        }, ensure_ascii=False)
+        
+        cache['data'] = response_body
+        cache['timestamp'] = current_time
+        
         return {
             'statusCode': 200,
             'headers': {
                 'Content-Type': 'application/json',
                 'Access-Control-Allow-Origin': '*'
             },
-            'body': json.dumps({
-                'products': products,
-                'total': len(products),
-                'updated_at': datetime.utcnow().isoformat()
-            }, ensure_ascii=False)
+            'body': response_body
         }
         
     except Exception as e:

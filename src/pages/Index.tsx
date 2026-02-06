@@ -476,40 +476,12 @@ const Index = () => {
                     </Button>
                   </div>
                 </div>
-                <div className="relative min-h-[400px] lg:min-h-[600px] bg-black overflow-hidden">
-                  {!showVideo ? (
-                    <>
-                      <img
-                        src="https://cdn.poehali.dev/files/2ab1d7e7-f29b-4901-98f8-4d87df2a6b0f.jpg"
-                        alt="Промышленный волчок"
-                        className="w-full h-full object-cover"
-                      />
-                      <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
-                        <Button
-                          size="lg"
-                          onClick={() => setShowVideo(true)}
-                          className="bg-accent hover:bg-accent/90 text-accent-foreground text-xl px-12 py-8 rounded-full shadow-2xl flex items-center gap-3"
-                        >
-                          <Icon name="Play" className="w-8 h-8" />
-                          Смотреть видео
-                        </Button>
-                      </div>
-                    </>
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center bg-black">
-                      <video
-                        src="https://cdn.poehali.dev/projects/bd9048a7-854b-4d3b-a782-386c5097cafc/bucket/DRB%20JR-120%20%D0%92%D0%BE%D0%BB%D1%87%D0%BE%D0%BA%20%D0%A2%D0%A1%D0%93.mp4"
-                        controls
-                        autoPlay
-                        loop
-                        className="max-w-full max-h-full"
-                        style={{ maxHeight: '600px' }}
-                      >
-                        <source src="https://cdn.poehali.dev/projects/bd9048a7-854b-4d3b-a782-386c5097cafc/bucket/DRB%20JR-120%20%D0%92%D0%BE%D0%BB%D1%87%D0%BE%D0%BA%20%D0%A2%D0%A1%D0%93.mp4" type="video/mp4" />
-                        Ваш браузер не поддерживает воспроизведение видео.
-                      </video>
-                    </div>
-                  )}
+                <div className="relative min-h-[400px] lg:min-h-[600px] overflow-hidden">
+                  <img
+                    src="https://cdn.poehali.dev/files/2ab1d7e7-f29b-4901-98f8-4d87df2a6b0f.jpg"
+                    alt="Промышленный волчок"
+                    className="w-full h-full object-cover"
+                  />
                 </div>
               </div>
             </Card>

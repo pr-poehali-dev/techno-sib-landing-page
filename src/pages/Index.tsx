@@ -401,7 +401,10 @@ const Index = () => {
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-20">
             <div className="flex items-center gap-4 lg:gap-12">
-              <img src="https://cdn.poehali.dev/projects/bd9048a7-854b-4d3b-a782-386c5097cafc/bucket/ff23bd6f-4714-405e-a0e1-1a2113cb8aa6.jpg" alt="Техно-Сиб" className="h-8 md:h-10 lg:h-12" />
+              <div className="flex flex-col gap-1">
+                <img src="https://cdn.poehali.dev/projects/bd9048a7-854b-4d3b-a782-386c5097cafc/bucket/ff23bd6f-4714-405e-a0e1-1a2113cb8aa6.jpg" alt="Техно-Сиб" className="h-8 md:h-10 lg:h-12" />
+                <a href="tel:88005338268" className="text-[10px] lg:hidden font-semibold whitespace-nowrap">8-800-533-82-68</a>
+              </div>
               <nav className="hidden lg:flex items-center gap-6">
                 <button onClick={() => scrollToSection('equipment')} className="hover:text-accent transition-colors">
                   Оборудование
@@ -433,14 +436,13 @@ const Index = () => {
               <div className="text-sm font-semibold">8-800-533-82-68</div>
             </div>
             <div className="flex lg:hidden items-center gap-2">
-              <a href="tel:88005338268" className="text-xs md:text-sm font-semibold whitespace-nowrap">8-800-533-82-68</a>
               <Button
                 variant="ghost"
                 size="icon"
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                 className="lg:hidden text-primary-foreground hover:bg-primary-foreground/10"
               >
-                <Icon name={mobileMenuOpen ? "X" : "Menu"} className="w-6 h-6" />
+                <Icon name={mobileMenuOpen ? "X" : "Menu"} className="w-8 h-8" />
               </Button>
             </div>
           </div>
@@ -482,9 +484,16 @@ const Index = () => {
       <section className="relative py-20 md:py-32 bg-gradient-to-br from-secondary via-background to-secondary overflow-hidden">
         <div className="container mx-auto px-4">
           <div className="max-w-7xl mx-auto">
-            <Card className="overflow-hidden shadow-2xl bg-white">
+            <Card className="overflow-hidden shadow-2xl bg-white relative">
               <div className="grid lg:grid-cols-2 gap-0">
-                <div className="p-8 md:p-12 lg:p-16 flex flex-col justify-center">
+                <div className="absolute inset-0 lg:hidden">
+                  <img
+                    src="https://cdn.poehali.dev/files/2ab1d7e7-f29b-4901-98f8-4d87df2a6b0f.jpg"
+                    alt="Промышленный волчок"
+                    className="w-full h-full object-cover opacity-20"
+                  />
+                </div>
+                <div className="p-8 md:p-12 lg:p-16 flex flex-col justify-center relative z-10">
                   <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight text-foreground">
                     Промышленные мясорубки, волчки и куттеры
                   </h1>
@@ -518,7 +527,7 @@ const Index = () => {
                     </Button>
                   </div>
                 </div>
-                <div className="relative min-h-[400px] lg:min-h-[600px] overflow-hidden">
+                <div className="relative min-h-[400px] lg:min-h-[600px] overflow-hidden hidden lg:block">
                   <img
                     src="https://cdn.poehali.dev/files/2ab1d7e7-f29b-4901-98f8-4d87df2a6b0f.jpg"
                     alt="Промышленный волчок"
@@ -674,18 +683,18 @@ const Index = () => {
               Подберите модель по типу и производительности
             </p>
             
-            <div className="flex justify-center gap-2 mb-8">
+            <div className="flex flex-col sm:flex-row justify-center gap-2 mb-8 px-4">
               <Button
                 size="lg"
                 onClick={() => setCatalogTab('mincers')}
-                className={catalogTab === 'mincers' ? 'bg-accent text-accent-foreground' : 'bg-secondary text-foreground hover:bg-accent/20'}
+                className={`w-full sm:w-auto ${catalogTab === 'mincers' ? 'bg-accent text-accent-foreground' : 'bg-secondary text-foreground hover:bg-accent/20'}`}
               >
-                Промышленные мясорубки/Волчки
+                Мясорубки/Волчки
               </Button>
               <Button
                 size="lg"
                 onClick={() => setCatalogTab('cutters')}
-                className={catalogTab === 'cutters' ? 'bg-accent text-accent-foreground' : 'bg-secondary text-foreground hover:bg-accent/20'}
+                className={`w-full sm:w-auto ${catalogTab === 'cutters' ? 'bg-accent text-accent-foreground' : 'bg-secondary text-foreground hover:bg-accent/20'}`}
               >
                 Куттеры
               </Button>

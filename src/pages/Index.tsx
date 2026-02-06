@@ -49,14 +49,12 @@ const Index = () => {
   const loadCatalog = async () => {
     try {
       setCatalogLoading(true);
-      const response = await fetch('https://functions.poehali.dev/6c4dff3c-6a6e-4b2c-a871-63fd3585e442');
+      const response = await fetch('https://functions.poehali.dev/91d69da5-6c30-42df-b916-1d740ca6830d');
       const data = await response.json();
       
       if (data.products) {
-        // Сортируем по цене по возрастанию
         const sortedProducts = data.products.sort((a: any, b: any) => a.price - b.price);
         setCatalogProducts(sortedProducts);
-        // Сохраняем в localStorage с временной меткой
         localStorage.setItem('catalog_data', JSON.stringify({
           products: sortedProducts,
           updated_at: data.updated_at
@@ -64,7 +62,6 @@ const Index = () => {
       }
     } catch (error) {
       console.error('Ошибка загрузки каталога:', error);
-      // Пробуем загрузить из кэша
       const cached = localStorage.getItem('catalog_data');
       if (cached) {
         const cachedData = JSON.parse(cached);
@@ -87,12 +84,9 @@ const Index = () => {
   ));
 
   const filteredCatalogProducts = catalogProducts.filter(product => {
-    let categoryId;
-    if (catalogTab === 'mincers') categoryId = 220;
-    else if (catalogTab === 'cutters') categoryId = 226;
-    else if (catalogTab === 'grinders') categoryId = 220;
+    const allowedCategories = catalogTab === 'cutters' ? [226, 457] : [220];
     
-    if (product.category_id !== categoryId) return false;
+    if (!allowedCategories.includes(product.category_id)) return false;
 
     if (filterBrand !== 'all') {
       const brandParam = product.params?.find((p: any) => p.name === 'Бренд');
@@ -474,13 +468,14 @@ const Index = () => {
                     </Button>
                   </div>
                 </div>
-                <div className="relative min-h-[400px] lg:min-h-[600px] bg-black">
+                <div className="relative min-h-[400px] lg:min-h-[600px] bg-black overflow-hidden">
                   <iframe
-                    src="https://rutube.ru/play/embed/e9f5748185b428a295be966c7cbb4e1e?autoplay=1&mute=1"
+                    src="https://rutube.ru/play/embed/e9f5748185b428a295be966c7cbb4e1e/?p=bVRCNrNe8t8&autoplay=1&muted=1"
                     frameBorder="0"
                     allow="clipboard-write; autoplay"
                     allowFullScreen
-                    className="absolute inset-0 w-full h-full object-cover"
+                    className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full min-w-full min-h-full"
+                    style={{ aspectRatio: '16/9' }}
                   />
                 </div>
               </div>

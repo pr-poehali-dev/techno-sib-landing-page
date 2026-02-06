@@ -1,0 +1,16 @@
+{
+  "tests": [
+    {
+      "name": "Get catalog products from XML feed",
+      "method": "GET",
+      "path": "/",
+      "expectedStatus": 200,
+      "expectedBody": {
+        "products": "array",
+        "total": "number",
+        "updated_at": "string"
+      },
+      "bodyMatcher": "partial"
+    }
+  ]
+}

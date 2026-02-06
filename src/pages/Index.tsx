@@ -403,7 +403,7 @@ const Index = () => {
             <div className="flex items-center gap-4 lg:gap-12">
               <div className="flex flex-col gap-1">
                 <img src="https://cdn.poehali.dev/projects/bd9048a7-854b-4d3b-a782-386c5097cafc/bucket/ff23bd6f-4714-405e-a0e1-1a2113cb8aa6.jpg" alt="Техно-Сиб" className="h-8 md:h-10 lg:h-12" />
-                <a href="tel:88005338268" className="text-[10px] lg:hidden font-semibold whitespace-nowrap">8-800-533-82-68</a>
+                <a href="tel:88005338268" className="text-sm lg:hidden font-bold whitespace-nowrap">8-800-533-82-68</a>
               </div>
               <nav className="hidden lg:flex items-center gap-6">
                 <button onClick={() => scrollToSection('equipment')} className="hover:text-accent transition-colors">
@@ -433,7 +433,7 @@ const Index = () => {
               <Button variant="secondary" className="bg-accent hover:bg-accent/90 text-accent-foreground font-semibold" onClick={() => openModal('Получить КП за 24 часа')}>
                 Получить КП за 24 часа
               </Button>
-              <div className="text-sm font-semibold">8-800-533-82-68</div>
+              <div className="text-lg font-bold">8-800-533-82-68</div>
             </div>
             <div className="flex lg:hidden items-center gap-2">
               <Button
@@ -442,7 +442,7 @@ const Index = () => {
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                 className="lg:hidden text-primary-foreground hover:bg-primary-foreground/10"
               >
-                <Icon name={mobileMenuOpen ? "X" : "Menu"} className="w-8 h-8" />
+                <Icon name={mobileMenuOpen ? "X" : "Menu"} className="w-10 h-10" />
               </Button>
             </div>
           </div>
@@ -481,7 +481,7 @@ const Index = () => {
 
 
 
-      <section className="relative py-20 md:py-32 bg-gradient-to-br from-secondary via-background to-secondary overflow-hidden">
+      <section className="relative py-6 md:py-12 bg-gradient-to-br from-secondary via-background to-secondary overflow-hidden">
         <div className="container mx-auto px-4">
           <div className="max-w-7xl mx-auto">
             <Card className="overflow-hidden shadow-2xl bg-white relative">

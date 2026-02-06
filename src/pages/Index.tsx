@@ -50,8 +50,12 @@ const Index = () => {
   const loadCatalog = async () => {
     try {
       setCatalogLoading(true);
-      const response = await fetch('https://functions.poehali.dev/91d69da5-6c30-42df-b916-1d740ca6830d');
+      const response = await fetch('https://functions.poehali.dev/91d69da5-6c30-42df-b916-1d740ca6830d?refresh=true');
       const data = await response.json();
+      console.log('Catalog loaded:', data.products?.length, 'products');
+      if (data.products?.length > 0) {
+        console.log('First product images:', data.products[0].additional_images);
+      }
       
       if (data.products) {
         const sortedProducts = data.products.sort((a: any, b: any) => a.price - b.price);

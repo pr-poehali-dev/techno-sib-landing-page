@@ -7,6 +7,10 @@ import time
 cache = {}
 CACHE_DURATION = 300
 
+def clear_cache():
+    global cache
+    cache = {}
+
 def handler(event, context):
     """Парсер XML-фида товаров с фильтрацией по категориям"""
     
@@ -27,14 +31,17 @@ def handler(event, context):
     
     try:
         current_time = time.time()
+        query_params = event.get('queryStringParameters', {}) or {}
+        force_refresh = query_params.get('refresh') == 'true'
         
-        if 'data' in cache and 'timestamp' in cache:
+        if not force_refresh and 'data' in cache and 'timestamp' in cache:
             if current_time - cache['timestamp'] < CACHE_DURATION:
                 return {
                     'statusCode': 200,
                     'headers': {
                         'Content-Type': 'application/json',
-                        'Access-Control-Allow-Origin': '*'
+                        'Access-Control-Allow-Origin': '*',
+                        'X-Cache': 'HIT'
                     },
                     'body': cache['data']
                 }
@@ -90,7 +97,11 @@ def handler(event, context):
                 param_unit = param.get('unit', '')
                 
                 if param_name == 'Картинки товара' and param_value:
-                    additional_images = [img.strip() for img in param_value.split(',') if img.strip()]
+                    img_url = param_value.strip()
+                    if img_url:
+                        if img_url.startswith('/'):
+                            img_url = 'https://t-sib.ru' + img_url
+                        additional_images.append(img_url)
                     continue
                 
                 if param_name == 'Видео (ссылка)':
@@ -137,7 +148,8 @@ def handler(event, context):
             'statusCode': 200,
             'headers': {
                 'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*'
+                'Access-Control-Allow-Origin': '*',
+                'X-Cache': 'MISS'
             },
             'body': response_body
         }

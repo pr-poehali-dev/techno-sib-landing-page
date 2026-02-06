@@ -1250,9 +1250,9 @@ const Index = () => {
 
       <footer id="contacts" className="bg-primary text-primary-foreground py-12">
         <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-2 gap-8">
             <div>
-              <img src="https://cdn.poehali.dev/projects/bd9048a7-854b-4d3b-a782-386c5097cafc/bucket/ff23bd6f-4714-405e-a0e1-1a2113cb8aa6.jpg" alt="Техно-Сиб" className="h-12 mb-4" />
+              <img src="https://cdn.poehali.dev/projects/bd9048a7-854b-4d3b-a782-386c5097cafc/bucket/ff23bd6f-4714-405e-a0e1-1a2113cb8aa6.jpg" alt="Техно-Сиб Групп" className="h-12 mb-4" />
               <p className="text-sm opacity-90">
                 Поставщик оборудования для мясопереработки
               </p>
@@ -1261,20 +1261,13 @@ const Index = () => {
               <h3 className="font-semibold mb-4">Контакты</h3>
               <div className="space-y-2 text-sm opacity-90">
                 <div>8-800-533-82-68</div>
-                <div>info@techno-sib.ru</div>
+                <div>info@t-sib.ru</div>
                 <div>Демозалы: Москва и Новосибирск</div>
-              </div>
-            </div>
-            <div>
-              <h3 className="font-semibold mb-4">Время работы</h3>
-              <div className="space-y-2 text-sm opacity-90">
-                <div>Пн-Пт: 9:00 - 18:00</div>
-                <div>Сб-Вс: Выходной</div>
               </div>
             </div>
           </div>
           <div className="mt-8 pt-8 border-t border-primary-foreground/20 text-center text-sm opacity-90">
-            2024 Техно-Сиб. Все права защищены.
+            2026 Техно-Сиб Групп. Все права защищены.
           </div>
         </div>
       </footer>

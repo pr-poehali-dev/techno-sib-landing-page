@@ -205,7 +205,7 @@ const Index = () => {
       text: 'Подбор под продукт — ножи/решётки/режимы',
     },
     {
-      image: 'https://cdn.poehali.dev/projects/bd9048a7-854b-4d3b-a782-386c5097cafc/files/b001e360-62cc-4ac3-b27b-6638fa567113.jpg',
+      image: 'https://cdn.poehali.dev/files/a8fe2f0a-ce7b-4fa5-ae2b-61a7b321a961.jpg',
       text: 'Быстрые сроки — под ваш дедлайн',
     },
     {

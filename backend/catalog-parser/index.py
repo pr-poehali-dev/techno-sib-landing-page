@@ -137,7 +137,11 @@ def handler(event, context):
             # Фильтруем товары:
             # - Если цена есть и меньше 300000 - пропускаем
             # - Если цены нет (None) - включаем товар
+            # - Если нет ни одного параметра - пропускаем
             if price_value is not None and price_value < 300000:
+                continue
+            
+            if len(params) == 0:
                 continue
             
             product = {

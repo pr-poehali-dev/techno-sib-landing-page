@@ -46,8 +46,10 @@ def handler(event, context):
                 product = parse_product(offer)
                 if product:
                     # Включаем товары без цены или с ценой >= 300000
+                    # И только если есть хотя бы один параметр
                     price = product.get('price')
-                    if price is None or price >= 300000:
+                    params = product.get('params_full', [])
+                    if (price is None or price >= 300000) and len(params) > 0:
                         filtered_products.append(product)
         
         # Возвращаем результат

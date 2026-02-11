@@ -29,7 +29,7 @@ import {
 const Index = () => {
   const [formData, setFormData] = useState({ name: '', phone: '' });
   const [agreed, setAgreed] = useState(false);
-  const [catalogTab, setCatalogTab] = useState<'mincers' | 'cutters'>('mincers');
+  const [catalogTab, setCatalogTab] = useState<'mincers' | 'cutters' | 'blockcutters'>('mincers');
   const [filterBrand, setFilterBrand] = useState('all');
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [quizAnswers, setQuizAnswers] = useState<string[]>(Array(6).fill(''));
@@ -102,18 +102,33 @@ const Index = () => {
       .filter(Boolean)
   ));
 
-  const filteredCatalogProducts = catalogProducts.filter(product => {
-    const allowedCategories = catalogTab === 'cutters' ? [226, 457] : [220, 221];
-    
-    if (!allowedCategories.includes(product.category_id)) return false;
+  const filteredCatalogProducts = catalogProducts
+    .filter(product => {
+      const allowedCategories = catalogTab === 'cutters' ? [226] : catalogTab === 'blockcutters' ? [220] : [221];
+      
+      if (!allowedCategories.includes(product.category_id)) return false;
 
-    if (filterBrand !== 'all') {
-      const brandParam = product.params?.find((p: any) => p.name === 'Бренд');
-      if (!brandParam || brandParam.value !== filterBrand) return false;
-    }
+      // Проверяем наличие хотя бы одного param
+      if (!product.params || product.params.length === 0) return false;
 
-    return true;
-  });
+      if (filterBrand !== 'all') {
+        const brandParam = product.params?.find((p: any) => p.name === 'Бренд');
+        if (!brandParam || brandParam.value !== filterBrand) return false;
+      }
+
+      return true;
+    })
+    .sort((a, b) => {
+      // Товары с ценой (не null и не 0) идут первыми, отсортированы по возрастанию
+      // Товары без цены (null или 0) идут после
+      const aHasPrice = a.price && a.price > 0;
+      const bHasPrice = b.price && b.price > 0;
+      
+      if (aHasPrice && !bHasPrice) return -1;
+      if (!aHasPrice && bHasPrice) return 1;
+      if (aHasPrice && bHasPrice) return a.price - b.price;
+      return 0;
+    });
 
   const openModal = (title: string) => {
     setModalTitle(title);
@@ -697,6 +712,13 @@ const Index = () => {
               >
                 Куттеры
               </Button>
+              <Button
+                size="lg"
+                onClick={() => setCatalogTab('blockcutters')}
+                className={`w-full sm:w-auto ${catalogTab === 'blockcutters' ? 'bg-accent text-accent-foreground' : 'bg-secondary text-foreground hover:bg-accent/20'}`}
+              >
+                Блокорезки
+              </Button>
             </div>
 
             <div className="flex flex-wrap justify-center gap-4">
@@ -782,13 +804,24 @@ const Index = () => {
                       )}
                     </div>
                   ) : (
-                    <img src={product.picture} alt={product.name} className="w-full h-56 object-contain bg-secondary" />
+                    <img 
+                      src={product.picture} 
+                      alt={product.name} 
+                      className="w-full h-56 object-contain bg-secondary cursor-pointer"
+                      onClick={() => {
+                        setLightboxImages([product.picture]);
+                        setLightboxIndex(0);
+                        setLightboxOpen(true);
+                      }}
+                    />
                   )}
                   <CardContent className="p-6 flex-1 flex flex-col">
                     <h3 className="text-xl font-bold mb-3 line-clamp-2">{product.name}</h3>
-                    <div className="mb-4">
-                      <span className="text-2xl font-bold text-accent">от {Math.round(product.price).toLocaleString('ru-RU')} ₽</span>
-                    </div>
+                    {product.price && product.price > 0 && (
+                      <div className="mb-4">
+                        <span className="text-2xl font-bold text-accent">от {Math.round(product.price).toLocaleString('ru-RU')} ₽</span>
+                      </div>
+                    )}
                     {product.params_preview && product.params_preview.length > 0 && (
                       <div className="mb-4 space-y-1">
                         {product.params_preview.map((param: any, idx: number) => (
@@ -1421,11 +1454,13 @@ const Index = () => {
                   />
                 )}
                 
-                <div>
-                  <h3 className="text-3xl font-bold text-accent mb-4">
-                    {Math.round(selectedProduct.price).toLocaleString('ru-RU')} ₽
-                  </h3>
-                </div>
+                {selectedProduct.price && selectedProduct.price > 0 && (
+                  <div>
+                    <h3 className="text-3xl font-bold text-accent mb-4">
+                      от {Math.round(selectedProduct.price).toLocaleString('ru-RU')} ₽
+                    </h3>
+                  </div>
+                )}
 
                 {selectedProduct.params_full && selectedProduct.params_full.length > 0 && (
                   <div>

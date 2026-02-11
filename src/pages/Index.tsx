@@ -509,7 +509,7 @@ const Index = () => {
                 </div>
                 <div className="p-8 md:p-12 lg:p-16 flex flex-col justify-center relative z-10">
                   <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight text-foreground">
-                    Промышленные мясорубки, волчки и куттеры
+                    Промышленные мясорубки, волчки, куттеры и блокорезки
                   </h1>
                   <p className="text-xl md:text-2xl mb-8 text-muted-foreground">
                     Прямые поставки от ведущих европейских и азиатских производителей

@@ -26,7 +26,7 @@ def handler(event, context):
     
     try:
         # Загружаем XML фид
-        xml_url = 'https://t-sib.ru/bitrix/catalog_export/export_Vvf.xml'
+        xml_url = 'https://t-sib.ru/upload/catalog.xml'
         response = requests.get(xml_url, timeout=30)
         response.raise_for_status()
         
@@ -36,16 +36,19 @@ def handler(event, context):
         # Находим все товары
         offers = root.findall('.//offer')
         
-        # Фильтруем товары по категориям 221 и 226
-        target_categories = ['221', '226']
+        # Фильтруем товары по категориям 220, 221, 226 (включая Блокорезки)
+        target_categories = ['220', '221', '226']
         filtered_products = []
         
         for offer in offers:
             category_id = offer.find('categoryId')
             if category_id is not None and category_id.text in target_categories:
                 product = parse_product(offer)
-                if product and product.get('price', 0) >= 300000:
-                    filtered_products.append(product)
+                if product:
+                    # Включаем товары без цены или с ценой >= 300000
+                    price = product.get('price')
+                    if price is None or price >= 300000:
+                        filtered_products.append(product)
         
         # Возвращаем результат
         result = {
@@ -101,12 +104,14 @@ def parse_product(offer):
         price = offer.find('price')
         if price is not None:
             price_text = price.text.strip()
-            # Убираем "от" и пробелы
-            price_text = price_text.replace('от', '').replace(' ', '').strip()
+            # Убираем "от", "руб", "руб.", пробелы и другие текстовые части
+            price_text = price_text.replace('от', '').replace('руб.', '').replace('руб', '').replace(' ', '').strip()
             try:
                 product['price'] = float(price_text)
             except ValueError:
-                product['price'] = 0
+                product['price'] = None
+        else:
+            product['price'] = None
         
         # Валюта
         currency = offer.find('currencyId')

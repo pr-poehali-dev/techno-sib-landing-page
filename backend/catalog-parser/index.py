@@ -46,7 +46,7 @@ def handler(event, context):
                     'body': cache['data']
                 }
         
-        xml_url = 'https://t-sib.ru/bitrix/catalog_export/export_Vvf.xml'
+        xml_url = 'https://t-sib.ru/upload/catalog.xml'
         
         with urlopen(xml_url) as response:
             xml_data = response.read()
@@ -67,7 +67,7 @@ def handler(event, context):
             categories[cat_id] = category.text
         
         products = []
-        target_categories = [220, 221, 226, 457]
+        target_categories = [220, 221, 226]
         total_images_found = 0
         
         for offer in shop.findall('.//offer'):
@@ -124,18 +124,20 @@ def handler(event, context):
                     params_preview.append(param_obj)
             
             # Парсим и очищаем цену
-            price_value = 0
+            price_value = None
             if price is not None:
                 price_text = price.text.strip()
-                # Убираем "от" и пробелы
-                price_text = price_text.replace('от', '').replace(' ', '').strip()
+                # Убираем "от", "руб", "руб.", пробелы и другие текстовые части
+                price_text = price_text.replace('от', '').replace('руб.', '').replace('руб', '').replace(' ', '').strip()
                 try:
                     price_value = float(price_text)
                 except ValueError:
-                    price_value = 0
+                    price_value = None
             
-            # Фильтруем товары дешевле 300 000 руб
-            if price_value < 300000:
+            # Фильтруем товары:
+            # - Если цена есть и меньше 300000 - пропускаем
+            # - Если цены нет (None) - включаем товар
+            if price_value is not None and price_value < 300000:
                 continue
             
             product = {
@@ -143,7 +145,7 @@ def handler(event, context):
                 'category_id': category_id,
                 'category_name': categories.get(category_id, ''),
                 'name': name.text if name is not None else '',
-                'price': price_value,
+                'price': price_value if price_value is not None else 0,
                 'picture': picture.text if picture is not None else '',
                 'additional_images': additional_images,
                 'description': description.text if description is not None else '',

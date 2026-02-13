@@ -225,7 +225,7 @@ const Index = () => {
       text: 'Быстрые сроки — под ваш дедлайн',
     },
     {
-      image: 'https://cdn.poehali.dev/files/4446cab2-d3e5-4982-8640-cf84aee6d898.jpg',
+      image: 'https://cdn.poehali.dev/projects/bd9048a7-854b-4d3b-a782-386c5097cafc/bucket/3c60481e-756f-404b-83d5-423798ead2f6.png',
       text: 'Сервис — пусконаладка, гарантия, запчасти',
     },
   ];
